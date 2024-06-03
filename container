@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # OCI image to use
-IMAGE="elixir:1.16.3-alpine"
+IMAGE="docker.io/elixir:1.16.3-alpine"
 
 # TCP port to publish, for testing
 if [ -z "$IMGFORMAT_PORT" ] ; then
@@ -9,7 +9,7 @@ if [ -z "$IMGFORMAT_PORT" ] ; then
 fi
 
 # Help text
-read -d '' HELP << EOF
+HELP=$(cat << EOF
 container -h|--help
     Print this help.
 
@@ -19,6 +19,7 @@ container cmd [args [...]]
 Container Image:
     ${IMAGE}
 EOF
+)
 
 # Make sure we have either podman or docker installed.
 if OCI=$(which podman) || OCI=$(which docker) ; then
@@ -35,7 +36,7 @@ WORKDIR=$(dirname $(realpath "$0" ))
 if [ -z "$GID" ] ; then
     GID=$(id -g $USER)
 fi
-read -d '' ARGS << EOF
+ARGS=$(cat << EOF
 -it --rm \
 --user=${UID}:${GID} --userns=keep-id \
 --volume=${WORKDIR}:/src:z \
@@ -44,6 +45,7 @@ read -d '' ARGS << EOF
 --env=IMGFORMAT_PORT=${IMGFORMAT_PORT} \
 ${IMAGE}
 EOF
+)
 
 # Print help & exit if no image is specified.
 if [ -z "${IMAGE}" ] ; then
