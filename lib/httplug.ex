@@ -14,15 +14,15 @@ defmodule ImgFormat.HTTPlug do
   end
 
   get "/images/:img" do
-    send_resp(conn, 200, "#{img}"\r\n)
+    send_resp(conn, 200, "#{img}\r\n")
   end
 
   post "/images" do
     IO.inspect conn.body_params
-    send_resp(conn, 200, "Success!"\r\n)
+    send_resp(conn, 200, "Success!\r\n")
   end
 
   match _ do
-    send_resp(conn, 404, "nothing here"\r\n)
+    send_resp(conn, 404, "nothing here\r\n")
   end
 end
