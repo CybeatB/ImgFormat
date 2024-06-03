@@ -1,0 +1,72 @@
+#!/bin/sh
+
+# OCI image to use
+IMAGE="elixir:1.16.3-alpine"
+
+# TCP port to publish, for testing
+if [ -z "$IMGFORMAT_PORT" ] ; then
+    IMGFORMAT_PORT="8080"
+fi
+
+# Help text
+read -d '' HELP << EOF
+container -h|--help
+    Print this help.
+
+container cmd [args [...]]
+    Run the given command inside the build container.
+
+Container Image:
+    ${IMAGE}
+EOF
+
+# Make sure we have either podman or docker installed.
+if OCI=$(which podman) || OCI=$(which docker) ; then
+    echo "Found ${OCI}"
+else
+    echo "Requies podman or docker"
+    exit 1;
+fi
+
+# Determine the path to this script, so it can be mounted inside the container.
+WORKDIR=$(dirname $(realpath "$0" ))
+
+# Container arguments.
+if [ -z "$GID" ] ; then
+    GID=$(id -g $USER)
+fi
+read -d '' ARGS << EOF
+-it --rm \
+--user=${UID}:${GID} --userns=keep-id \
+--volume=${WORKDIR}:/src:z \
+--workdir=/src \
+--publish=${IMGFORMAT_PORT}:${IMGFORMAT_PORT} \
+--env=IMGFORMAT_PORT=${IMGFORMAT_PORT} \
+${IMAGE}
+EOF
+
+# Print help & exit if no image is specified.
+if [ -z "${IMAGE}" ] ; then
+    echo "$HELP"
+    echo "    Not Specified"
+    exit 1
+fi
+
+# Print help & exit if no argments are provided.
+if [ -z "$1" ] ; then
+    echo "$HELP"
+    exit 1
+fi
+
+# Print help, or run the given command.
+case $1 in
+    "-h" | "--help")
+        echo "$HELP"
+        ;;
+    *)
+        CMD="${OCI} run ${ARGS} $*"
+        echo "${CMD}"
+        $CMD
+        ;;
+esac
+
