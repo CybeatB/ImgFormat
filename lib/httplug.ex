@@ -10,7 +10,7 @@ defmodule ImgFormat.HTTPlug do
   plug :dispatch
 
   get "/images" do
-    send_resp(conn, 200, "nothing here yet\r\n")
+    send_file(conn, 200, System.get_env("WEB_ROOT") <> "/upload.html")
   end
 
   get "/images/:img" do
@@ -19,7 +19,7 @@ defmodule ImgFormat.HTTPlug do
 
   post "/images" do
     IO.inspect conn.body_params
-    send_resp(conn, 200, "Success!\r\n")
+    send_file(conn, 200, System.get_env("WEB_ROOT") <> "/upload.html")
   end
 
   match _ do

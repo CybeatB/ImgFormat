@@ -43,6 +43,7 @@ ARGS=$(cat << EOF
 --workdir=/src \
 --publish=${IMGFORMAT_PORT}:${IMGFORMAT_PORT} \
 --env=IMGFORMAT_PORT=${IMGFORMAT_PORT} \
+--env=WEB_ROOT=/src/html \
 ${IMAGE}
 EOF
 )
