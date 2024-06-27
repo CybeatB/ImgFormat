@@ -12,7 +12,8 @@ defmodule ImgFormat do
       #  {Task, fn -> ImgFormat.HTTP.accept(port) end},
       #  restart: :permanent
       #)
-      {Bandit, plug: ImgFormat.HTTPlug, port: port}
+      {Bandit, plug: ImgFormat.HTTPlug, port: port},
+      ImgFormat.Repo
     ]
 
     opts = [

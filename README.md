@@ -38,12 +38,16 @@ variable.
   resolution & format is requested.
 - Supported formats & resolutions are not specified.
 
-### Minimum Viable Product
-- Single process handling all requests & processing.
-- Hosted locally, interaction probably via curl/wget.
+### Implementation
+- Elixir process management
 - Receive requests over HTTP/S; common, well-supported protocol.
-- In-memory database?
+- Hosted locally during testing, barebones HTML pages for upload & download
+- SQLite database; easy to prototype with, and to swap out for another SQL DB
+  if required.
+- Technically not storing images themselves in the database; storing them in
+  the filesystem, and storing the paths in the database.
+  This is more in line with "good practice" for a small web service.
 - 2 image formats; JPEG & PNG arbitrarily chosen as suitable.
 - Downscale to half- & quarter-resolution, unless image is already smaller than
-  4x4 pixels. Meets the "resizing" requirement
+  4x4 pixels.
 

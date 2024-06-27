@@ -28,3 +28,4 @@ img_format-*.tar
 # Dependency archives, I think?
 /.hex/
 /.mix/
+/.cache/
